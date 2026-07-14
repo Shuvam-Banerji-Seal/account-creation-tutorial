@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Daily Gazette — Account Creation Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Special+Elite&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper-base: #ECE2CC;
+  --paper-light: #F5EEDC;
+  --paper-dark: #DCCBA3;
+  --ink-black: #2B2521;
+  --ink-sepia: #5C4632;
+  --ink-red: #8C2F1E;
+  --coffee-stain: #6F4E2E;
+  --wax-seal: #7A1F1F;
+  --brass: #A9812E;
+  --shadow-soft: rgba(43,37,33,0.18);
+  --shadow-hard: rgba(43,37,33,0.45);
+  --step-masthead: clamp(2.2rem, 5vw, 4rem);
+  --step-headline: clamp(1.3rem, 2.5vw, 2rem);
+  --step-deck: 1.05rem;
+  --step-body: 1rem;
+  --step-caption: 0.8rem;
+  --tracking-caps: 0.08em;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:#2B2521;}
+
+.paper {
+  background-color: var(--paper-base);
+  background-image: radial-gradient(circle at 20% 30%, rgba(0,0,0,0.02) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(0,0,0,0.025) 0%, transparent 45%);
+  position: relative; height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center;
+}
+.paper::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.slide {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  opacity: 0; visibility: hidden; transition: opacity 0.6s ease, visibility 0.6s ease; z-index: 1;
+  clip-path: polygon(0% 1.5%,3% 0%,7% 2%,11% 0.5%,16% 3%,22% 0%,28% 2%,34% 0.5%,40% 2.5%,47% 0%,53% 2%,60% 0%,66% 3%,73% 0.5%,80% 2%,87% 0%,93% 2.5%,100% 1%,100% 100%,0% 100%);
+}
+.slide.active{opacity:1;visibility:visible;}
+
+.slide-inner{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;padding:1.5rem 2.5rem 1rem;}
+
+.masthead {
+  text-align: center; border-bottom: 1px solid var(--ink-sepia); border-top: 1px solid var(--ink-sepia);
+  padding: 0.3rem 0; margin-bottom: 0.6rem; position: relative; flex-shrink: 0;
+}
+.masthead::before,.masthead::after{content:"";position:absolute;left:10%;right:10%;height:1px;background:var(--ink-sepia);}
+.masthead::before{top:-3px;}
+.masthead::after{bottom:-3px;}
+.masthead-logo{max-height:60px;width:auto;display:block;margin:0 auto;}
+.masthead .dateline{font-family:'Special Elite',cursive;font-size:var(--step-caption);color:var(--ink-sepia);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.15rem;}
+@media(max-width:640px){.masthead-logo{max-height:40px;}}
+
+.content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;min-height:0;position:relative;}
+
+.step-label{font-family:'Special Elite',cursive;font-size:var(--step-deck);color:var(--ink-red);text-transform:uppercase;letter-spacing:0.1em;text-align:center;flex-shrink:0;}
+.step-title{font-family:'Playfair Display',serif;font-size:var(--step-headline);color:var(--ink-black);text-align:center;font-weight:700;line-height:1.2;flex-shrink:0;max-width:90%;}
+
+.image-frame{flex:1;min-height:0;width:100%;max-width:900px;display:flex;align-items:center;justify-content:center;background:var(--paper-light);border:1px solid var(--paper-dark);box-shadow:2px 3px 8px var(--shadow-soft);padding:0.5rem;position:relative;}
+.image-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+
+.caption{font-family:'Special Elite',cursive;font-size:var(--step-caption);color:var(--ink-sepia);text-align:center;max-width:80%;line-height:1.4;flex-shrink:0;padding:0.3rem 0;}
+
+.nav{display:flex;align-items:center;justify-content:center;gap:1.5rem;padding:0.4rem 0;border-top:1px solid var(--paper-dark);flex-shrink:0;z-index:10;}
+.nav-btn{font-family:'Special Elite',cursive;font-size:1rem;color:var(--ink-sepia);background:none;border:1px solid var(--paper-dark);padding:0.25rem 0.8rem;cursor:pointer;transition:background 0.2s,color 0.2s;user-select:none;}
+.nav-btn:hover{background:var(--paper-dark);color:var(--ink-black);}
+.nav-btn:focus-visible{outline:2px dashed var(--ink-red);outline-offset:2px;}
+.slide-counter{font-family:'Special Elite',cursive;font-size:var(--step-caption);color:var(--ink-sepia);letter-spacing:0.05em;}
+
+.stain{position:absolute;width:140px;height:140px;border-radius:50%;pointer-events:none;z-index:0;mix-blend-mode:multiply;opacity:0.6;}
+.stain-1{bottom:60px;right:20px;background:radial-gradient(circle,transparent 55%,rgba(111,78,46,0.10) 58%,rgba(111,78,46,0.22) 62%,rgba(111,78,46,0.06) 66%,transparent 70%);transform:rotate(8deg);}
+.stain-2{top:120px;left:15px;width:90px;height:90px;background:radial-gradient(circle,transparent 52%,rgba(111,78,46,0.08) 56%,rgba(111,78,46,0.18) 60%,rgba(111,78,46,0.05) 64%,transparent 68%);transform:rotate(-12deg);}
+
+.foxing{position:absolute;pointer-events:none;z-index:0;border-radius:50%;background:radial-gradient(circle,rgba(92,70,50,0.06) 0%,transparent 70%);}
+.foxing-1{width:60px;height:60px;top:5%;right:3%;}
+.foxing-2{width:40px;height:40px;bottom:15%;left:5%;}
+.foxing-3{width:80px;height:80px;top:30%;left:2%;opacity:0.5;}
+
+.title-slide .content{gap:1rem;}
+.title-slide .subtitle{font-family:'Playfair Display',serif;font-size:var(--step-deck);color:var(--ink-sepia);font-style:italic;text-align:center;}
+.title-slide .divider-rule{width:60%;height:1px;background:linear-gradient(90deg,transparent,var(--brass),transparent);margin:0.2rem auto;}
+.title-slide .section-label{font-family:'Special Elite',cursive;font-size:var(--step-caption);color:var(--ink-red);letter-spacing:0.15em;text-transform:uppercase;margin-top:0.5rem;}
+.title-slide .image-frame{max-height:45vh;}
+
+.section-slide .content{text-align:center;gap:1.5rem;}
+.section-slide .section-icon{font-size:3rem;font-family:'Playfair Display',serif;color:var(--ink-red);letter-spacing:0.3em;}
+.section-slide .rule-decorative{width:120px;height:2px;background:var(--brass);margin:0.5rem auto;}
+.section-slide .section-body{font-family:'Source Serif 4',serif;font-size:var(--step-body);color:var(--ink-sepia);max-width:500px;line-height:1.6;}
+
+.drop-cap::first-letter{font-family:'Playfair Display',serif;font-size:3em;float:left;line-height:0.8;padding:0.05em 0.08em 0 0;color:var(--ink-red);}
+
+.part-divider{font-family:'Special Elite',cursive;font-size:var(--step-caption);color:var(--ink-sepia);letter-spacing:0.1em;text-transform:uppercase;padding:0.1rem 0.5rem;border:1px solid var(--paper-dark);display:inline-block;}
+
+.key-hint{font-family:'Special Elite',cursive;font-size:0.7rem;color:var(--ink-sepia);opacity:0.6;position:absolute;bottom:3.2rem;right:1.5rem;z-index:3;}
+
+@media(max-width:640px){
+  .slide-inner{padding:1rem 1rem 0.5rem;}
+  .masthead h1{font-size:clamp(1.4rem,6vw,2.2rem);}
+  .step-title{font-size:clamp(1rem,4vw,1.3rem);}
+  .image-frame{padding:0.3rem;}
+  .stain-1{width:80px;height:80px;bottom:50px;right:10px;}
+  .stain-2{width:60px;height:60px;top:80px;left:10px;}
+}
+@media(prefers-reduced-motion:reduce){.slide{transition:none;}}
+</style>
+</head>
+<body>
+
+<div class="paper" id="app">
+
+<div class="slide active" data-slide="0">
+  <div class="slide-inner title-slide">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">SlashDot · IISER Kolkata · Epoch 1970-01-01 00:00:00 UTC</div></div>
+    <div class="content">
+      <div class="section-icon">❧</div>
+      <div class="subtitle">SlashDot brings you</div>
+      <h2 class="step-title" style="font-size:clamp(1.8rem,4vw,3rem);">Creating Your Google &amp; GitHub Accounts</h2>
+      <div class="divider-rule"></div>
+      <p class="section-body drop-cap" style="max-width:560px;">In this modern age, a man's correspondence and his code are his two most vital instruments. This guide shall walk you through the establishment of a Gmail account and a GitHub repository — your passport to the digital world.</p>
+      <div class="section-label">Press any arrow key or click to begin</div>
+    </div>
+    <div class="stain stain-1"></div><div class="stain stain-2"></div>
+    <div class="foxing foxing-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide section-slide" data-slide="1">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Part the First · Gmail</div></div>
+    <div class="content">
+      <div class="section-icon">✉</div>
+      <div class="rule-decorative"></div>
+      <h2 class="step-title" style="font-weight:900;">How to Make a Gmail Account</h2>
+      <p class="section-body">A Gmail account is your gateway to a range of Google services, from email to cloud storage. Follow these steps to set up your account quickly and easily.</p>
+      <div class="part-divider">pictorial guide</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="2">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Overview</div></div>
+    <div class="content">
+      <div class="step-label">Getting Started</div>
+      <div class="step-title">Creating a Gmail Account</div>
+      <div class="image-frame"><img src="01-featured.png" alt="How to make a Gmail account"></div>
+      <div class="caption">A step-by-step pictorial guide to creating your Gmail account</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="3">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Step the First</div></div>
+    <div class="content">
+      <div class="step-label">Step 1</div>
+      <div class="step-title">Go to the Google Account Creation Page</div>
+      <div class="image-frame"><img src="02-step1-create-account.png" alt="Create account screen"></div>
+      <div class="caption">Click "Create account" and select "For my Personal Use"</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="4">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Step the Second</div></div>
+    <div class="content">
+      <div class="step-label">Step 2</div>
+      <div class="step-title">Fill in Your Basic Information</div>
+      <div class="image-frame"><img src="03-step2-name.png" alt="Name entry"></div>
+      <div class="caption">Enter your first and last name — in this example, "Alok Jha"</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="5">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Step the Second (cont.)</div></div>
+    <div class="content">
+      <div class="step-label">Step 2 (cont.)</div>
+      <div class="step-title">Provide Birthday &amp; Gender</div>
+      <div class="image-frame"><img src="04-step2-birthday-gender.png" alt="Birthday and gender"></div>
+      <div class="caption">Fill in your birthdate and select your gender</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="6">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Step the Third</div></div>
+    <div class="content">
+      <div class="step-label">Step 3</div>
+      <div class="step-title">Create a Strong Password</div>
+      <div class="image-frame"><img src="05-password.png" alt="Password screen"></div>
+      <div class="caption">At least 8 characters: upper, lower, a number, and a symbol</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="7">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Step the Fourth</div></div>
+    <div class="content">
+      <div class="step-label">Step 4</div>
+      <div class="step-title">Phone Verification</div>
+      <div class="image-frame"><img src="06-phone-verification.png" alt="Phone verification"></div>
+      <div class="caption">Enter your cell phone number — Google sends an OTP code</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="8">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Step the Fifth</div></div>
+    <div class="content">
+      <div class="step-label">Step 5</div>
+      <div class="step-title">Choose Your Gmail Address</div>
+      <div class="image-frame"><img src="07-custom-email.png" alt="Custom email"></div>
+      <div class="caption">Take a suggestion or create a custom email handle</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="9">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Step the Sixth</div></div>
+    <div class="content">
+      <div class="step-label">Step 6</div>
+      <div class="step-title">Review Your Information</div>
+      <div class="image-frame"><img src="08-review-info.png" alt="Review screen"></div>
+      <div class="caption">Review all details, then proceed to "Next"</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="10">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Complete</div></div>
+    <div class="content">
+      <div class="step-label">Complete</div>
+      <div class="step-title">Your Inbox is Ready</div>
+      <div class="image-frame"><img src="09-inbox-completed.png" alt="Gmail inbox"></div>
+      <div class="caption">Your Gmail inbox is now live — the green icon marks your account</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="11">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Gmail · Victory</div></div>
+    <div class="content">
+      <div class="step-label">Well Done</div>
+      <div class="step-title">Gmail Account Successfully Created</div>
+      <div class="image-frame"><img src="10-conclusion.png" alt="Success"></div>
+      <div class="caption">You now have a Gmail account — your passport to the Google ecosystem</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide section-slide" data-slide="12">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Part the Second · GitHub</div></div>
+    <div class="content">
+      <div class="section-icon">⌘</div>
+      <div class="rule-decorative"></div>
+      <h2 class="step-title" style="font-weight:900;">Demystifying GitHub</h2>
+      <p class="section-body">A Beginner's Guide to Setting Up Your Account and Creating Your First Repository on the premier platform for code collaboration.</p>
+      <div class="part-divider">pictorial guide</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="13">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Introduction</div></div>
+    <div class="content">
+      <div class="step-label">What Is GitHub?</div>
+      <div class="step-title">A Platform for Code Collaboration</div>
+      <div class="image-frame"><img src="github-01-hero-unsplash.png" alt="GitHub hero"></div>
+      <div class="caption">GitHub uses Git to host repositories and enable teamwork at scale</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="14">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Step the First</div></div>
+    <div class="content">
+      <div class="step-label">Step 1</div>
+      <div class="step-title">Navigate to GitHub's Sign-Up Page</div>
+      <div class="image-frame"><img src="github-02-signup-page.png" alt="GitHub signup"></div>
+      <div class="caption">Visit github.com and click the "Sign up" button</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="15">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Step the Second</div></div>
+    <div class="content">
+      <div class="step-label">Step 2</div>
+      <div class="step-title">Create Your Account</div>
+      <div class="image-frame"><img src="github-03-create-account.png" alt="Create account"></div>
+      <div class="caption">Enter your email, password, and a username</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="16">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Step the Third</div></div>
+    <div class="content">
+      <div class="step-label">Step 3</div>
+      <div class="step-title">Account Verification</div>
+      <div class="image-frame"><img src="github-04-verification.png" alt="Verification"></div>
+      <div class="caption">Complete the puzzle challenge to verify you're human</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="17">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Step the Fourth</div></div>
+    <div class="content">
+      <div class="step-label">Step 4</div>
+      <div class="step-title">Personalize Your Account</div>
+      <div class="image-frame"><img src="github-05-personalization.png" alt="Personalization"></div>
+      <div class="caption">Tell GitHub about your experience level and interests</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="18">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Step the Fifth</div></div>
+    <div class="content">
+      <div class="step-label">Step 5</div>
+      <div class="step-title">Verify Your Email</div>
+      <div class="image-frame"><img src="github-06-email-verify.png" alt="Email verification"></div>
+      <div class="caption">Check your inbox for a verification code from GitHub</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="19">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Dashboard</div></div>
+    <div class="content">
+      <div class="step-label">Welcome</div>
+      <div class="step-title">Your GitHub Dashboard</div>
+      <div class="image-frame"><img src="github-07-dashboard.png" alt="Dashboard"></div>
+      <div class="caption">The dashboard is your command center for all activity</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="20">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · First Repository</div></div>
+    <div class="content">
+      <div class="step-label">Key Action</div>
+      <div class="step-title">Create Your First Repository</div>
+      <div class="image-frame"><img src="github-08-first-repo.png" alt="First repo"></div>
+      <div class="caption">Name your project, add a description, choose public or private</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="21">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Cloning</div></div>
+    <div class="content">
+      <div class="step-label">Key Action</div>
+      <div class="step-title">Clone a Repository Locally</div>
+      <div class="image-frame"><img src="github-09-cloning.png" alt="Cloning"></div>
+      <div class="caption">Use <code>git clone &lt;url&gt;</code> to work on your project offline</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="22">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Pull Requests</div></div>
+    <div class="content">
+      <div class="step-label">Key Action</div>
+      <div class="step-title">Reviewing &amp; Merging Code</div>
+      <div class="image-frame"><img src="github-10-pull-request.png" alt="Pull request"></div>
+      <div class="caption">The Pull Request process — the heart of collaboration on GitHub</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="23">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Security</div></div>
+    <div class="content">
+      <div class="step-label">Security</div>
+      <div class="step-title">Two-Factor Authentication</div>
+      <div class="image-frame"><img src="github-11-2fa.png" alt="2FA"></div>
+      <div class="caption">2FA adds an extra layer of protection to your account</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="24">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Collaboration</div></div>
+    <div class="content">
+      <div class="step-label">Concept</div>
+      <div class="step-title">Collaboration on GitHub</div>
+      <div class="image-frame"><img src="github-12-collaboration.png" alt="Collaboration"></div>
+      <div class="caption">Fork, branch, commit, and merge — the collaborative workflow</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="25">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Mastery</div></div>
+    <div class="content">
+      <div class="step-label">Concept</div>
+      <div class="step-title">Mastering GitHub</div>
+      <div class="image-frame"><img src="github-13-mastering.png" alt="Mastering"></div>
+      <div class="caption">Collaboration, clarity, and continuous improvement</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="26">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub · Complete</div></div>
+    <div class="content">
+      <div class="step-label">All Set</div>
+      <div class="step-title">Your GitHub Journey Begins</div>
+      <div class="image-frame"><img src="github-14-conclusion.png" alt="Conclusion"></div>
+      <div class="caption">You now have a GitHub account — start collaborating and building</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide section-slide" data-slide="27">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Part the Third · GitHub Pages</div></div>
+    <div class="content">
+      <div class="section-icon">⚙</div>
+      <div class="rule-decorative"></div>
+      <h2 class="step-title" style="font-weight:900;">Create &amp; Host a Personal Site</h2>
+      <p class="section-body">Learn how to create and host your own personal website on GitHub Pages — completely free.</p>
+      <div class="part-divider">pictorial guide</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="28">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Start</div></div>
+    <div class="content">
+      <div class="step-label">Getting Started</div>
+      <div class="step-title">Hosting a Personal Site on GitHub</div>
+      <div class="image-frame"><img src="ghpages-01-hero.png" alt="GitHub Pages hero"></div>
+      <div class="caption">Create and host your personal website on GitHub Pages for free</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="29">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Prerequisites</div></div>
+    <div class="content">
+      <div class="step-label">Before You Begin</div>
+      <div class="step-title">What You'll Need</div>
+      <div class="image-frame"><img src="ghpages-02-what-need.png" alt="Prerequisites"></div>
+      <div class="caption">A GitHub account and basic knowledge of Git</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="30">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Step 1</div></div>
+    <div class="content">
+      <div class="step-label">Step 1</div>
+      <div class="step-title">Create a New Repository</div>
+      <div class="image-frame"><img src="ghpages-03-new-repo.png" alt="New repository"></div>
+      <div class="caption">Click the "+" icon and select "New repository"</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="31">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Step 2</div></div>
+    <div class="content">
+      <div class="step-label">Step 2</div>
+      <div class="step-title">Configure Repository Settings</div>
+      <div class="image-frame"><img src="ghpages-04-repo-setup.png" alt="Repo setup"></div>
+      <div class="caption">Name it <em>username</em>.github.io for a default Pages site</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="32">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Step 3</div></div>
+    <div class="content">
+      <div class="step-label">Step 3</div>
+      <div class="step-title">Fork a Template Repository</div>
+      <div class="image-frame"><img src="ghpages-05-fork-repo.png" alt="Fork repo"></div>
+      <div class="caption">Fork an existing template to jump-start your site</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="33">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Step 4</div></div>
+    <div class="content">
+      <div class="step-label">Step 4</div>
+      <div class="step-title">Rename Your Repository</div>
+      <div class="image-frame"><img src="ghpages-06-repo-name.png" alt="Rename repo"></div>
+      <div class="caption">Rename it to match your desired URL</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="34">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Windows</div></div>
+    <div class="content">
+      <div class="step-title">Setting Up Git on Windows</div>
+      <div class="step-title">Setting Up Git on Windows</div>
+      <div class="caption">Install Git for Windows and configure your environment</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="35">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Linux/Mac</div></div>
+    <div class="content">
+      <div class="step-label">For Linux &amp; Mac Users</div>
+      <div class="step-title">Using the Terminal</div>
+      <div class="image-frame"><img src="ghpages-08-linux-scenario.png" alt="Linux Mac setup"></div>
+      <div class="caption">Git usually comes pre-installed — verify with <code>git --version</code></div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="36">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Clone</div></div>
+    <div class="content">
+      <div class="step-label">Step 5</div>
+      <div class="step-title">Clone the Repository Locally</div>
+      <div class="image-frame"><img src="ghpages-09-open-terminal.png" alt="Clone repo"></div>
+      <div class="caption">Open your terminal and use <code>git clone</code> to pull the repo down</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="37">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Git Workflow</div></div>
+    <div class="content">
+      <div class="step-label">Step 6</div>
+      <div class="step-title">Stage, Commit &amp; Push</div>
+      <div class="image-frame"><img src="ghpages-10-git-commands.png" alt="Git commands"></div>
+      <div class="caption">Use <code>git add</code>, <code>git commit</code>, and <code>git push</code> to publish changes</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="38">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · index.html</div></div>
+    <div class="content">
+      <div class="step-label">Key File</div>
+      <div class="step-title">Edit Your index.html</div>
+      <div class="image-frame"><img src="ghpages-11-index-html.png" alt="Index HTML"></div>
+      <div class="caption">This is the main page of your site — customise it freely</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="39">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Settings</div></div>
+    <div class="content">
+      <div class="step-label">Step 7</div>
+      <div class="step-title">Configure GitHub Pages</div>
+      <div class="image-frame"><img src="ghpages-12-settings.png" alt="Pages settings"></div>
+      <div class="caption">Go to Settings → Pages and select the branch to deploy</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="40">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Branch</div></div>
+    <div class="content">
+      <div class="step-label">Step 8</div>
+      <div class="step-title">Select the Branch</div>
+      <div class="image-frame"><img src="ghpages-13-pages-branch.png" alt="Branch selection"></div>
+      <div class="caption">Choose <code>main</code> or <code>gh-pages</code> as your source branch</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="41">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Publish</div></div>
+    <div class="content">
+      <div class="step-label">Step 9</div>
+      <div class="step-title">Publish Your Site</div>
+      <div class="image-frame"><img src="ghpages-14-publish.png" alt="Publish"></div>
+      <div class="caption">GitHub Pages will build and deploy your site automatically</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="42">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · About</div></div>
+    <div class="content">
+      <div class="step-label">Customise</div>
+      <div class="step-title">Edit the About Page</div>
+      <div class="caption">Tell visitors who you are and what you do</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="43">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Posts</div></div>
+    <div class="content">
+      <div class="step-label">Customise</div>
+      <div class="step-title">Add a Blog Post</div>
+      <div class="caption">Write your first blog post in Markdown</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="44">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Theme</div></div>
+    <div class="content">
+      <div class="step-label">Customise</div>
+      <div class="step-title">Choose a Theme &amp; Design</div>
+      <div class="caption">Pick a Jekyll theme to style your site</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="45">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Commit</div></div>
+    <div class="content">
+      <div class="step-label">Step 10</div>
+      <div class="step-title">Commit Your Changes</div>
+      <div class="caption">Push all changes to GitHub to update your live site</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="46">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Domain</div></div>
+    <div class="content">
+      <div class="step-label">Optional</div>
+      <div class="step-title">Set Up a Custom Domain</div>
+      <div class="caption">Point your own domain to GitHub Pages via a CNAME record</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-1"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="47">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Profile</div></div>
+    <div class="content">
+      <div class="step-label">Final Touch</div>
+      <div class="step-title">Complete Your About Me</div>
+      <div class="caption">Add your bio, links, and a profile picture</div>
+    </div>
+    <div class="stain stain-1"></div><div class="foxing foxing-2"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="48">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">GitHub Pages · Live</div></div>
+    <div class="content">
+      <div class="step-label">All Set</div>
+      <div class="step-title">Your Site is Live!</div>
+      <div class="caption">Your personal website is now live on the world wide web</div>
+    </div>
+    <div class="stain stain-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="slide" data-slide="49">
+  <div class="slide-inner">
+    <div class="masthead"><img src="slashdot-logo.png" alt="SlashDot" class="masthead-logo"><div class="dateline">Finis</div></div>
+    <div class="content" style="text-align:center;gap:1rem;">
+      <div class="section-icon">❧</div>
+      <div class="rule-decorative"></div>
+      <h2 class="step-title" style="font-weight:900;font-size:clamp(1.6rem,3vw,2rem);">You Are Now Equipped</h2>
+      <p class="section-body drop-cap" style="max-width:500px;">With a Gmail account and a GitHub profile, you stand at the threshold of the digital age — ready to send, to code, and to collaborate across the wide world.</p>
+      <div class="part-divider">End of Guide</div>
+    </div>
+    <div class="stain stain-1"></div><div class="stain stain-2"></div>
+    <div class="foxing foxing-1"></div><div class="foxing foxing-2"></div><div class="foxing foxing-3"></div>
+  </div>
+</div>
+
+<div class="nav" style="position:absolute;bottom:0;left:0;right:0;background:var(--paper-base);">
+  <button class="nav-btn" id="prevBtn">◄ Back</button>
+  <span class="slide-counter" id="slideCounter">1 / 50</span>
+  <button class="nav-btn" id="nextBtn">Next ►</button>
+</div>
+<div class="key-hint">← → to navigate</div>
+</div>
+
+<script>
+(function(){
+  const slides = document.querySelectorAll('.slide');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('slideCounter');
+  let current = 0;
+  const total = slides.length;
+  function goTo(i){slides[current].classList.remove('active');current=(i+total)%total;slides[current].classList.add('active');counter.textContent=(current+1)+' / '+total;}
+  function next(){goTo(current+1);}
+  function prev(){goTo(current-1);}
+  prevBtn.addEventListener('click',prev);
+  nextBtn.addEventListener('click',next);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();next();}
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();prev();}
+  });
+  document.querySelector('.paper').addEventListener('click',function(e){
+    if(e.target.closest('.nav')||e.target.closest('.nav-btn'))return;
+    const r=this.getBoundingClientRect();(e.clientX-r.left)>r.width/2?next():prev();
+  });
+  counter.textContent='1 / '+total;
+})();
+</script>
+</body>
+</html>
